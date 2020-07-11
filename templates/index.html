@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+    <style type="text/css">
+      body{
+        padding: 0;
+        background-color: #afe3ed;
+        margin: 0;
+        height: 100vh;
+        width: 100vw;
+      }
+      .post-container{
+        margin: 0;
+        width: 100vw;
+        height: 60vh;
+        align-items: center;
+      }
+      .get-container{
+        width: 100vw;
+        height: 32vh;
+        margin-top: 2em;
+      }
+  /*  .post-form, .post-code, .post-response{
+      height: 80%;
+    }*/
+       .post-code, .get-code, .get-response, .post-response{
+        background-color: #f0f8fa;
+        -webkit-box-shadow: 0 10px 6px -6px #777;
+        -moz-box-shadow: 0 10px 6px -6px #777;
+        box-shadow: 0 10px 6px -6px #777;
+        height: 90%;
+      }
+       .get-code div, .post-code div,  .post-response div{
+        overflow-y: auto;
+        height: 80%;
+        font-size: 0.8em;
+      }
+        .get-code div pre, .get-response div pre{
+          overflow-y: auto;
+          height: 65%;
+        }
+      button{
+        width: 6.5em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid p-0">
+       <div class="post-container row p-0">
+          <div class="post-form col-4 p-1 mr-5">
+            <div id="form-data">
+                <div class="form-group">
+                  <label for="#username">Username</label>
+                  <input type="text" name="username" id="username" class="form-control" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                  <label for="#password">Password</label>
+                  <input type="password" name="password" id="password" class="form-control" placeholder="Enter password">
+                </div>
+                <div class="form-group">
+                  <label for="#fullname">Fullname</label>
+                  <input type="text" name="fullname" id="fullname" class="form-control" placeholder="Enter your fullname">
+                </div>
+                <div class="form-group">
+                  <label for="#job">Job</label>
+                  <input type="text" name="job" id="job" class="form-control" placeholder="Enter your job">
+                </div>
+              </div>
+                <button type="button" class="btn btn-primary" onclick="ajaxPost()">Ajax Post</button>
+                <button type="button" class="btn btn-primary" onclick="jqueryAjaxPost()">$.ajax Post</button>
+                <button type="button" class="btn btn-primary" onclick="jqueryPost()">$.post Post</button>
+                <button type="button" class="btn btn-primary" onclick="fetchPost()">Fetch Post</button>
+          </div>
+
+          <div class="post-code col-4 p-2 mr-3">
+              <h4>Code</h4>
+              <hr>
+              <div>
+                <pre>
+                  
+                </pre>              
+              </div>
+          </div>
+          <div class="post-response col-3 p-2">
+              <h4>Response</h4>
+              <hr>
+              <div>
+                <pre>
+                  
+                </pre>              
+              </div>
+          </div>
+       </div>
+       <hr>
+
+       <div class="get-container row">
+          <div class="get-buttons d-flex flex-column col-2 pl-4 align-items-end">
+                <button type="button" class="btn btn-success mb-1" onclick="ajaxGet()">Ajax Get</button>
+                <button type="button" class="btn btn-success mb-1" onclick="jqueryAjaxGet()">$.ajax Get</button>
+                <button type="button" class="btn btn-success mb-1" onclick="jqueryGet()">$.Get Get</button>
+                <button type="button" class="btn btn-success " onclick="fetchGet()">Fetch Get</button>
+          </div>
+          <div class="get-code col-4 mr-3">
+            <h4>Code</h4>
+            <hr>
+            <div>
+              <pre>
+                
+              </pre>
+            </div>
+          </div>
+          <div class="get-response col-5">
+             <h4>Response</h4>
+             <hr>
+             <div>
+               <pre>
+                 
+               </pre>
+             </div>
+          </div>
+       </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        form_data = $("#form-data")
+
+      function display_response(code_div, code, response_div, response){
+        $(code_div).text(code);
+        $(response_div).text(` ${response}`);
+      }
+
+      function parse_data(){
+        _username = $("#username").val();
+        _password = $("#password").val();
+        _fullname = $("#fullname").val();
+        _job = $("#job").val();
+        user = {
+          username : _username,
+          password : _password,
+          fullname : _fullname,
+          job : _job
+        }
+        return user
+      }
+      //this is a XMLHTTPREQUEST post
+      function ajaxPost(){
+        post_code_div = $(".post-code div pre")
+        post_response_div = $(".post-response div pre")
+        post_code = `//this is a XMLHTTPREQUEST post
+                      function ajaxPost(){
+                      data = parse_data()   //convert the returned object of user() to JSON
+                      xhr = new XMLHttpRequest()    // create a request object
+
+                      url = "/add" 
+                      xhr.onreadystatechange = function(){
+                        if(this.readyState == 4 && this.status == 200){
+                            display_response()
+                        }
+                      }
+
+                      xhr.open("POST", url, true)
+                      xhr.setRequestHeader("content-type", "application/json")
+                      xhr.send(JSON.stringify(data))`
+
+        data = parse_data()//convert the returned object of user() to JSON
+        xhr = new XMLHttpRequest()
+
+        url = "/add" 
+        xhr.onreadystatechange = function(){
+          if(this.readyState == 4 && this.status == 200){
+              display_response(post_code_div, post_code, post_response_div, this.responseText)
+              $(form_data)[0].reset();
+              console.log(this)
+          }
+          else{
+              display_response(post_code_div, post_code, post_response_div, this.responseText)
+              $(form_data)[0].reset();
+
+          }
+        }
+
+        xhr.open("POST", url, true)
+        xhr.setRequestHeader("content-type", "application/json")
+        xhr.send(JSON.stringify(data))
+      }
+
+      function jqueryAjaxPost(){
+        post_code_div = $(".post-code div pre")
+        post_response_div = $(".post-response div pre")
+        post_code = `//this is a Jquery AJAX post request
+                         function jqueryAjaxPost(){
+                      post_code_div = $(".post-code div pre")
+                      post_response_div = $(".post-response div pre")
+                      post_code = 
+                      
+                      $.ajax({
+                        url : "/add",
+                        type : "POST",
+                        contentType : "application/json; charset=utf-8",
+                        data : JSON.stringify(parse_data()),
+                        success : function(response){
+                          console.log(response)
+                        },
+                        dataType : "json",
+                        error : function(error){
+                          console.log(JSON.stringify(error))          }
+                      })
+                    }`
+
+        $.ajax({
+          url : "/add",
+          type : "POST",
+          contentType : "application/json; charset=utf-8",
+          data : JSON.stringify(parse_data()),
+           dataType : "json",
+          success : function(response){
+              display_response(post_code_div, post_code, post_response_div, JSON.stringify(response))
+          },
+          error : function(error){
+             display_response(post_code_div, post_code, post_response_div,JSON.stringify(error))      
+          }
+        })
+      }
+
+      function jqueryPost(){
+        post_code_div = $(".post-code div pre")
+        post_response_div = $(".post-response div pre")
+        post_code = ` //This is a Jquery post request 
+
+                      function jqueryPost(){
+                      post_code_div = $(".post-code div pre")
+                      post_response_div = $(".post-response div pre")
+
+                      // Then perform the request
+                  $.post("/add", parse_data(), function(response, status){
+                     if (status == 200){
+                          display_response(post_code_div, post_code, post_response_div, JSON.stringify(response))
+                      }
+                    },"json")
+                    .catch(function(error){ // .catch function is called when the request is failed
+                      display_response(post_code_div, post_code, post_response_div, error.responseText)
+                    })
+                  }`
+
+        $.post("/add", parse_data(), function(response, status, request){
+             if (request.status == 200){
+                  display_response(post_code_div, post_code, post_response_div, JSON.stringify(response))
+              }
+            },"json")
+            .catch(function(error){
+              display_response(post_code_div, post_code, post_response_div, error.responseText)
+            })
+          }
+
+      function fetchPost(){
+        post_code_div = $(".post-code div pre")
+        post_response_div = $(".post-response div pre")
+        post_code = `// This is a fetch Post
+                      function fetchPost(){
+
+                        //starting the fetch request
+                        fetch("/add", {
+                          method : "POST",
+                          header : {
+                            "Content-Type" : "application/json"
+                          },
+                          body : JSON.stringify(parse_data())
+                        })
+                          .then(function(response){
+                          if (response.status !== 200){
+                            return 
+                          }
+                          response.json()
+                          .then(function(data){
+                            display_response(post_code_div, )
+                          })
+                        })
+                      }`
+
+        fetch("/add", {
+          method : "POST",
+          headers : {
+            "content-type" : "application/json"
+          },
+          body : JSON.stringify(parse_data())
+          })
+          .then(function(response){
+          if (response.status !== 200){
+            error = `error:${response.status}\n msg : ${response.statusText}`
+            display_response(post_code_div, post_code, post_response_div, error)
+             return
+          }
+          response.json()
+          .then(function(data){
+            display_response(post_code_div, post_code, post_response_div, JSON.stringify(data))
+          })
+          })
+          .catch(function(error){
+            console.log(error)
+           display_response(post_code_div, post_code, post_response_div, JSON.stringify(error))
+          })
+        }
+      
+      function ajaxGet() {
+        let xhr = new XMLHttpRequest()
+        let url = "/users"
+        get_response_div = $(".get-response div pre")
+        get_code_div = $(".get-code div pre")
+        get_code = `//This is XMLHTTPREQUEST GET request
+
+                    function ajaxGet() {
+                    let xhr = new XMLHttpRequest()
+                    let url = "/users"
+                    xhr.onreadystatechange = function(){
+                      if (this.readyState == 4 && this.status == 200 ){
+                            console.log(this)
+                      }else{
+                            console.log(this.responseText)
+                      }
+                    }
+                    xhr.open("GET", url, true)
+                    xhr.send()
+                  }`
+
+        xhr.onreadystatechange = function(){
+          if (this.readyState == 4 && this.status == 200 ){
+                display_response(get_code_div, get_code, get_response_div, JSON.stringify(this.response))
+          }else{
+                display_response(get_code_div, get_code, get_response_div, JSON.stringify(this.response))
+          }
+        }
+        xhr.open("GET", url, true)
+        xhr.send()
+      }
+
+      function jqueryAjaxGet(){
+        get_response_div = $(".get-response div pre")
+        get_code_div = $(".get-code div pre")
+        get_code = ` //This is a Jquery GET request
+
+                    function jqueryAjaxGet(){
+                    $.ajax({
+                      method : "GET",
+                      url : "/users",
+                      success : function(response){
+                        display_response(get_code_div, get_code, get_response_div, JSON.stringify(response))
+                      },
+                      error : function(error){
+                        display_response(get_code_div, get_code, get_response_div, JSON.stringify(error))
+                      }
+                    })
+                  }`
+        $.ajax({
+          method : "GET",
+          url : "/users",
+          success : function(response){
+            display_response(get_code_div, get_code, get_response_div, JSON.stringify(response))
+          },
+          error : function(error){
+            display_response(get_code_div, get_code, get_response_div, JSON.stringify(error))
+          }
+        })
+      }
+
+      function jqueryGet(){
+        get_response_div = $(".get-response div pre")
+        get_code_div = $(".get-code div pre")
+        get_code = `// This a jquery GET request
+        function jqueryGet(){
+        $.get("/users", function(response,status, request){
+          if(status == "success"){
+              display_response(get_code_div, get_code, get_response_div, response)
+          }else{
+            display_response(get_code_div, get_code, get_response_div, JSON.stringify(response))
+          }
+        }).fail(function(error){
+          display_response(get_code_div, get_code, get_response_div, JSON.stringify(error))
+        })
+      }
+`
+        $.get("/users", function(response,status, request){
+          if(status == "success"){
+              display_response(get_code_div, get_code, get_response_div, JSON.stringify(response))
+          }else{
+            display_response(get_code_div, get_code, get_response_div, JSON.stringify(response))
+          }
+        }).fail(function(error){
+          display_response(get_code_div, get_code, get_response_div, JSON.stringify(error))
+        })
+      }
+
+      function fetchGet(){
+        get_response_div = $(".get-response div pre")
+        get_code_div = $(".get-code div pre")
+        get_code =`// THis is a fetch Get request
+
+                    function fetchGet(){
+                      get_response_div = $(".get-response div pre")
+                      get_code_div = $(".get-code div pre")
+                      get_code =
+                      fetch("/users",{
+                        method : "GET",
+                      })
+                      .then(function(response){
+                        response.json()
+                      .then(function(data){
+                           display_response(get_code_div, get_code, get_response_div, JSON.stringify(data))
+                      })
+                      })
+                      .catch(function(error){
+                           display_response(get_code_div, get_code, get_response_div, JSON.stringify(error))
+                      })
+                    }`
+        fetch("/user.",{
+          method : "GET",
+        })
+        .then(function(response){
+         if (response.status !== 200){
+          display_response(get_code_div, get_code, get_response_div, response.statusText)
+         }
+          response.json()
+        .then(function(data){
+             display_response(get_code_div, get_code, get_response_div, JSON.stringify(data))
+        })
+        })
+        .catch(function(error){
+             display_response(get_code_div, get_code, get_response_div, JSON.stringify(error))
+        })
+      }
+    </script>
+  </body>
+</html>
